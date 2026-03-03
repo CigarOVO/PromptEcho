@@ -12,10 +12,22 @@ pip install -r requirements.txt
 
 ## Training
 We use `torchrun` to fine-tune the model's linguistic priors on single and merged-token character length patterns. This step requires a multi-GPU setup (8 GPUs recommended).
+
+
+**Stage 1: Deterministic Alignment Fine-Tuning**
+
+Initializes the model to understand the mapping between individual token characters and semantic embeddings.
 ```bash
-# Fine-tune the base model with LoRA to capture character-length semantics
-torchrun --standalone --nnodes=1 --nproc-per-node=8 scripts/train.py
+torchrun --standalone --nnodes=1 --nproc-per-node=8 scripts/single_alignment.py
 ```
+
+**Stage 2: Reasoning-based Decomposition with CoT**
+
+Based on the Stage 1 model, this phase introduces merged-token sequences with cot supervised signal to train the semantics-aware decomposition and reasoning abilities.
+```bash
+torchrun --standalone --nnodes=1 --nproc-per-node=8 scripts/merged_decomposition.py
+```
+
 - **Input**: Training corpus of dialogue pairs with single and merged-token length metadata.
 - **Output**: Saved LoRA checkpoints and updated tokenizer configurations in `./checkpoints/`.
 
@@ -42,14 +54,17 @@ accelerate launch --multi_gpu --mixed_precision bf16 scripts/eval_5metrics.py \
 ## 📂 Repository Structure
 ```text
 ├── data/
-│   ├── ChatGpt/            # Exemplar .pcap traces from ChatGPT sessions
+│   ├── ChatGPT/            # Exemplar .pcap traces from ChatGPT sessions
 │   ├── DeepSeek/           # Exemplar .pcap traces from DeepSeek sessions
-│   ├── train_data.json     # Representative subset of training samples
-│   └── test_data.json      # Representative subset of test samples
+│   ├── train_align.json    # [Stage 1] Subset of Single-Token alignment data
+│   ├── test_align.json     # [Stage 1] Subset of Single-Token test data
+│   ├── train_decompose.json # [Stage 2] Subset of Merged-Token decomposition data
+│   └── test_decompose.json  # [Stage 2] Subset of Merged-Token test data
 ├── scripts/
-│   ├── train.py            # Training script (Distributed)
-│   ├── generate_new_refactored.py  # Inference & Reconstruction
-│   └── eval_5metrics.py    # Multi-metric evaluation suite
-├── Dockerfile              # Container definition
+│   ├── single_alignment.py     # Stage 1: Deterministic Alignment Fine-Tuning
+│   ├── merged_decomposition.py # Stage 2: Reasoning-based Decomposition with CoT
+│   ├── generate_new_refactored.py # Inference engine for sequence reconstruction
+│   └── eval_5metrics.py        # Multi-metric evaluation (Cosine, R1, ED, etc.)
+├── Dockerfile              # Standardized reproduction environment
 └── requirements.txt        # Python dependencies
 ```
