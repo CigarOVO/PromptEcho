@@ -57,7 +57,7 @@ accelerate launch --multi_gpu --mixed_precision bf16 scripts/eval_5metrics.py \
 │   ├── ChatGPT/            # Exemplar .pcap traces from ChatGPT sessions
 │   ├── DeepSeek/           # Exemplar .pcap traces from DeepSeek sessions
 │   ├── train_align.json    # [Stage 1] Subset of Single-Token alignment data
-│   ├── test_align.json     # [Stage 1] Subset of Single-Token test data
+│   ├── test_align.csv     # [Stage 1] Subset of Single-Token test data
 │   ├── train_decompose.json # [Stage 2] Subset of Merged-Token decomposition data
 │   └── test_decompose.json  # [Stage 2] Subset of Merged-Token test data
 ├── scripts/
