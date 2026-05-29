@@ -71,6 +71,4 @@ accelerate launch --multi_gpu --mixed_precision bf16 scripts/eval_5metrics.py \
 ## Data Anonymization Notice
 All released network traces are anonymized exemplar traces collected for research purposes. Sensitive identifiers and authentication-related metadata have been removed prior to release.
 
-## License
-This project is released under the MIT License.
 
