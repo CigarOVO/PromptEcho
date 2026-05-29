@@ -28,9 +28,9 @@ def mprint(pstr):
     if is_main_process():
         return print(pstr)
 
-def initialize_distributed():
-    if not dist.is_initialized() and "RANK" in os.environ and "WORLD_SIZE" in os.environ:
-        dist.init_process_group(backend="nccl")
+# def initialize_distributed():
+#     if not dist.is_initialized() and "RANK" in os.environ and "WORLD_SIZE" in os.environ:
+#         dist.init_process_group(backend="nccl")
 
 def wait_for_everyone():
     if torch.distributed.is_available() and dist_is_initialized():

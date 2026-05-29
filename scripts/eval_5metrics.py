@@ -50,8 +50,8 @@ def read_and_print_csv(csv_file_path):
     rouge1_values = df["ROUGE1"].values
     print("📊 ROUGE-1 (Unigram Overlap)")
     print(f"   Average: {rouge1_values.mean():.4f}")
-    print(f"   Perfect Match (= 1.0): {sum(1 for x in cosine_values if x >= 0.999) / len(cosine_values) * 100:.2f}%")
-    print(f"   Excellent (> 0.9): {sum(1 for x in rouge1_values if x > 0.8) / len(rouge1_values) * 100:.2f}%")
+    print(f"   Perfect Match (= 1.0): {sum(1 for x in rouge1_values if x >= 0.999) / len(cosine_values) * 100:.2f}%")
+    print(f"   Excellent (> 0.9): {sum(1 for x in rouge1_values if x > 0.9) / len(rouge1_values) * 100:.2f}%")
     print(f"   Good (> 0.5): {sum(1 for x in rouge1_values if x > 0.5) / len(rouge1_values) * 100:.2f}%")
     print(f"   Fair (> 0.3): {sum(1 for x in rouge1_values if x > 0.3) / len(rouge1_values) * 100:.2f}%")
     print()
